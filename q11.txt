@@ -1,0 +1,113 @@
+--------------------
+Programming Approach
+--------------------
+
+1. Dyanamic programming
+2. Recursion
+
+-----------
+EXPLANATION
+-----------
+
+	**********
+	Pseudocode
+	**********
+
+	anti_sqaud(n, m, k):
+    	1.	if n == 0: return 1
+    	2.	if n < k: return 0
+    	3.	if m < k: return 0
+    	4.	if memoize_table[n][m] == NIL:
+      	5.		 memoize_table[n][m] = anti_sqaud(n-m, m, k) + anti_sqaud(n, m-1, k)
+    	6.	return memoize_table[n][m]
+
+	Description
+	-----------
+	The function anti_squad(n,m,k) calculates no. of partitons possible of 'n' people in such a way that each group in a partition 
+	has atmost 'm' and atleast 'k' number of people.  
+	
+	Input variables
+	---------------
+	- n : total number of people to be partitioned  
+	- m : maximum number of people allowed in each group
+	- k : minimum number of people required in each group(this value remains same for each recursive call)
+	
+	Global variables
+	----------------
+	- memoize_table : 2D array containing values returned by function call anti_squad(n,m,k) for every valid combination of n and m.
+					
+	Side effects
+	------------
+	Updates the value of memoize_table[n][m] if not already calculated. 
+	
+	Return value
+	------------
+	No. of possible partition.
+
+	Approach
+	--------
+	Consider all ways of partitioning n people in groups of atmost m people and atleast k people.
+	anti_squad(n,m,k) gives this value.
+	If we have no upper bound of people in a group, we need to call 
+	anti_squad(n,n,k)
+
+	Let's say
+	n = 10
+	k = 3 
+	anti_squad(10,10,3) = 5
+	listed below are all 5 possible partitions
+	1.	10
+	2.	7, 3
+	3.	6, 4
+	4.	5, 5
+	5.	4, 3, 3
+
+	Now we can split these combinations in two sets:
+	
+	Set A
+	Combinations having atleast one group whose count is equal to m(=10 in our example)
+
+	10
+	
+	Set B
+	Combinations having no group count equal to m(=10 in our example)
+
+	7, 3
+	6, 4
+	5, 5
+	4, 3, 3
+	
+	Because every partiton will be either in Set A or in Set B, 
+	we can say anti_squad(n,n,m) = size(Set A) + size(Set B). 
+	Now we have
+	 size(Set A) = anti_squad(n-m, m, k) because it has already made a group of m members and is now calling the function 
+	 	       to partition remaining people.
+	 size(Set B) = anti_squad(n, m-1, k) because it puts upper bound to m-1, so no group can have more than m-1 members.
+ 
+	By substitution
+	 anti_squad(n, m, k) = anti_squad(n-m, m, k) + anti_squad(n, m-1, k)
+
+	Since overlapping recursive calls are being made, we use a memoize_table to store already computed values. 
+
+----------
+Complexity
+----------
+
+Total no. of people = N
+Minimum no. of people required in each group = K
+
+Recurrence relation:	T(n,m) = T(n-m,m) + T(n,m-1)	;	n, m <= N
+			T(0,m) = 1
+			T(n,0) = 0
+			T(n,m) = 0			;	n < K or m < K
+
+The base cases take constant time - O(1).
+Size of memoize_table is N x N.
+We will be calcuting values of memoize_table[n][m] for n,m <= N only once since we are 
+returning immediately if its value is already computed.
+Therefore, total time complexity is O(N^2). 
+
+Time complexity:	O(N^2)
+Space complexity:	O(N^2)
+
+

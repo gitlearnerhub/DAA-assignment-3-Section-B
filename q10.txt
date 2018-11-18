@@ -1,0 +1,152 @@
+--------------------
+Programming Approach
+--------------------
+
+1. Greedy
+2. Iterative
+
+-----------
+EXPLANATION
+-----------
+
+	Global variables
+	----------------
+	
+	- a_mat : a boolean 2D matrix, where value at a_mat[x][y] states whether person x knows person y. True, if yes. False, if no.
+	- isPotenital : a boolean array, where value at isPotenital[i] states whether a person i can considered for invititation. True, if yes. 
+			False, if no.
+	
+======================================================================================================================
+	
+	--------------------------------------
+	Function 1: countknown(n, person_x)
+	--------------------------------------
+ 
+	**********
+	Pseudocode
+	**********
+
+	countknown(n, person_x)
+    	1.	count = 0;
+    	2.	for i = 1 to n
+    	3.		if isPotential[i] == true and a_mat[i][person_x]
+    	4.			count = count + 1
+      	5.	return count
+
+	Description
+	-----------
+	The function countknown(n, person_x) calculates number of people that a person_x knows.
+	
+	Input variables
+	---------------
+	
+	- n : size of array isPotenital
+	- person_x : person for which number of his/her acquaintance has to be calculated
+	
+	Return value
+	------------
+	number of people that person_x knows
+
+======================================================================================================================
+
+	-------------------------
+	Function 2: plan_party(n)
+	-------------------------
+
+	**********
+	Pseudocode
+	**********
+
+	plan_party(n):
+	1.	potential_count = n;
+	2.	for j = 1 to n
+	3.		known = countknown(n,j);
+	4.		unknown = potential_count - known - 1;
+	5.		if isPotential[j] and (known < 5 or unknown < 5) 
+	6.			isPotential[j] = false
+	7.			potential_count = potential_count - 1
+	8.			j = 0
+	9.			if potential_count < 11
+	10.				for i = 1 to n
+	11.					isPotential[i] = false
+	12.				break	
+
+	Description
+	-----------
+	This function computes all persons who can be invitated for a party out of n people based on following conditions:
+		1. Every person invited should know at least five other people that are invited.
+		2. Every person invited should not know at least five other people that are invited.
+		3. Number of invitees is maximized
+	
+	Input variable
+	--------------
+	- n : Number of people to choose from
+	
+	Return value
+	------------
+	None
+	
+	Side effects
+	------------
+	If either condition 1 or condition 2 is not true for a person x then, update isPotenital[x] to false
+
+======================================================================================================================
+
+	-----------------------------
+	Function 3: print_invitees(n)
+	-----------------------------
+	
+	**********
+	Pseudocode
+	**********
+
+	print_invitees(n):
+	1.	count = 0
+	2.	for i = 1 to n
+	3.		if isPotential[i] == true
+	4.			print i
+	5.			count = count + 1
+	6.	print count
+
+	Description
+	-----------
+	print_invitee(n) function prints the final invitees and the count of invitees.		
+
+======================================================================================================================	
+
+	Approach
+	--------
+	Initially, zero people are removed. Check for condition 1 and 2 for every person.
+	Whenever a failure occur remove that person and start all over again with remaining persons.
+	Stop when no one will fail the conditions or everyone fails it.
+ 
+----------
+Complexity
+----------
+
+Function 1:
+
+line 1 		-> O(1)
+loop 2-4	-> O(n)	linear time
+line 5		-> O(1)
+
+--------------------------------------------------
+
+Function 2:
+
+line 1		-> O(1)
+line 2		-> j iterates from 1 to n, 
+line 3		-> O(n) it makes a call to countknown in every iteration
+line 4		-> O(1)
+line 5		-> if the condition in this line is satisfied, the value of j is again set to 1.
+		   which implies there will be more than n iterations in line 2. In worst case value of j is set to 1 by every value of j,
+		   therefore the main loop runs atmost n^2 times.
+line 6-8	-> O(1)
+line 9		-> if this condition is true, we will come out of the main loop. and line 10-11 will iterate n times but only once, hence it 			   will not effect the degree of time complexity
+
+--------------------------------------------------
+
+Since, countknown is called atmost n^2 time. 
+
+	Time complexity  = O(n^3)
+	Space complexity = O(n^2)	

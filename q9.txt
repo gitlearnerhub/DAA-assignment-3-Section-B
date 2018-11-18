@@ -1,0 +1,166 @@
+--------------------
+Programming Approach
+--------------------
+
+1. Greedy
+2. Iterative
+	
+-----------
+Explanation
+-----------
+
+	Data structure
+	--------------
+
+	- participant => {swim_time, bike_time, run_time, p_number}
+
+	- swim_time : expected swim time of participant
+	- bike_time : expected bike time of participant
+	- run_time : expected run time of participant
+	- p_number : participant number
+
+======================================================================================================================
+	
+	--------------------------------------------------
+	Function 1: equate(participant p1, participant p2)
+	--------------------------------------------------
+	
+	**********
+	Pseudocode
+	**********
+
+	equate(participant p1, participant p2):
+	1.	p1.p_number = p2.p_number
+	2.	p1.swim_time = p2.swim_time
+	3.	p1.bike_time = p2.bike_time
+	4.	p1.run_time = p2.run_time	
+	 				
+	Description
+	-----------
+	This function equates all fields of structure p1 to structure p2. It other words it a participant object to another participant object.
+	
+	Input variables
+	---------------
+	- p1 : object of type participant in which values have to be stored
+	- p2 : object of type participant from which values have to be copied
+
+	Return value
+	------------
+	NONE
+	
+======================================================================================================================
+
+	-----------------------------------------------------
+	Function 2: isGreater(participant p1, participant p2)
+	-----------------------------------------------------
+	
+	**********
+	Pseudocode
+	**********
+
+	isGreater(participant p1, participant p2):
+	1.	s1  = p1.swim_time
+	2.	br1 = p1.bike_time + p1.run_time
+	3.	s2  = p2.swim_time
+	4.	br2 = p2.bike_time + p2.run_time
+	5.	if s1+max(br1, s2+br2) > s2+max(br2, s1+br1)
+	6.		return true
+	7.	else
+	8.		return false
+
+	Description
+	-----------
+	This function assumes that there are only two participant in the competition and 
+	compares the completion_time(CT) of two scenarios possible
+	1. CT1 : Participant 1 goes first = p1.swimtime + maximum(p1.remaintime, p2.swimtime + p2.remaintime)
+	2. CT2 : Participant 2 goes first = p2.swimtime + maximum(p2.remaintime, p1.swimtime + p1.remaintime)
+	
+	where remaintime = biketime + runtime
+	
+	Input variables
+	---------------
+	- p1 : object of type participant for comparision
+	- p2 : object of type participant for comparision
+	- sr1 : expected swimming time of participant 1
+	- br1 : expected bike time + running time of participant 1
+	- sr2 : expected swimming time of participant 2
+	- br2 : expected bike time + running time of participant 2
+
+	Return value
+	------------
+	Returns 
+	TRUE - ( CT1 > CT2 ) if completion time when participant 1 goes first is more than completion time when participant 2 goes first 
+	FALSE -( CT1 <= CT2 ) otherwise
+
+======================================================================================================================
+
+	----------------------------------------
+	Function 3: sort(participant p[], int n)
+	----------------------------------------
+	
+	**********
+	Pseudocode
+	**********
+	
+	sort(participant p[], int n): 
+	1.	for i = 1 to n-1
+	2.		equate(key,p[i])
+	3.		j = i-1
+	4.		while j>=0 && isGreater(p[j],key)
+	5.			equate(p[j+1],p[j])
+	6.			j = j-1
+	7.		equate(p[j+1], key)	
+
+	Description
+	-----------
+	This function performs insertion sort based on a special greater than operation.
+	
+	Input variables
+	---------------
+	- p[] : array of objects of type participant 
+	- n : total number of participants
+	- key : object of type participant
+
+	Return value
+	------------
+	NONE	
+
+======================================================================================================================
+
+	Approach
+	--------
+	The code is based on insertion sort approach, instead of comparing each pair of elements for "greater than" operator, a "special 
+	greater than" operation is used, explained in function isGreater(). After performing comparision using isGreater() and applying a
+	sorting algorithm on the same lines as that of insertion sort, the ordering of participants which will take minimum time to complete
+	the whole competition is obtained. 
+
+----------
+Complexity
+----------
+
+Function 1: O(1)
+
+line 1-4	-> O(1), vaiable assignments
+
+--------------------------------------------------
+
+Function 2: O(1)
+
+line 1-8	-> O(1), variable assignments and conditional statments
+
+--------------------------------------------------
+
+Function 3:  
+
+line 1 		-> iterates n times
+line 2		-> each call to equate() takes O(1) time
+line 3 		-> each assignment takes constant time
+line 4,5,6	-> each of the lines 4,5,6 take O(1) time, and execute i number of times, i.e, when i=1, these lines execute 1 time, 
+		   when i=2, they execute 2 times ... and when i=n-1, they execute n-1 times
+line 7		-> each call to equate() takes O(1) time
+
+--------------------------------------------------
+
+Since lines 1,2,3,7 execute O(n) times because of the outer for loop, and lines 4,5,6 execute 1,2,3 ... n-1 times, O(n^2), the overall time complexity comes out to be O(n^2),
+
+Time complexity = O(n^2)

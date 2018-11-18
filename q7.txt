@@ -1,0 +1,87 @@
+--------------------
+Programming Approach
+--------------------
+
+1. Greedy
+2. Iterative
+	
+-----------
+Explanation
+-----------
+
+	Data structure
+	--------------
+
+	- transD => {buy_day, sell_day}
+
+	- buy_day : date on which merchant buys product
+	- sell_day : date on which merchant sells product
+
+	GLOBAL VARIABLE: t -> object of type transactionDates
+	
+	---------------------------------
+	Function 1: calcDates(float p[], int n)
+	---------------------------------
+	
+	**********
+	Pseudocode
+	**********
+
+	calcDates(float p[], int n):
+	1.	min = p[0]
+	2.	max_diff = p[1] - p[0]
+	3.	temp = 0
+	4.	if max_diff > 0
+	5.		t.sell_day = 1
+	6.	for i = 0 to n-1
+	7.		if p[i]-min > max_diff
+	8.			max_diff = p[i] - min
+	9.			t.buy_day = temp
+	10.			t.sell_day = i
+	11.		if p[i] < min
+	12.			min = p[i]
+	13.			temp = i
+	14.	if max_diff <= 0
+	15.		t.buy_day = -1
+	16.		t.sell_day = -1
+	17.	return t
+	 				
+	Description
+	-----------
+	This function calculates the buy date and sell date for which profit is maximum.
+	
+	Input variables
+	---------------
+	- p[] : array of prices on each day
+	- n : total number of days
+	- min : stores minimum price of all the dates
+	- max_diff : stores the maximum attainable profit by buying and selling on certain days
+	- temp : used for storing temporary values calculated
+	
+	Return value
+	------------
+	If possible, returns an object of type transactionDates with the two dates for which profit is maximum.
+	Else returns a tuple {-1,-1} indicating no such dates exist where profit can be made among given dates.
+		
+
+	Approach
+	--------
+	We initialize minimum with first element of price array and the difference bewtween 2nd and 1st element to be the maximum difference. 
+	After that, we iterate through the price array and update values of max_diff if any difference is more than current max_diff. 
+	Similarly, the value of minimum is updated as we iterate across the array. The sell and buy date is recorded only when max_diff is
+	updated and not when the minimum is updated, because of real-life possibilities (buy date has to come before sell date). The final
+	maximum difference between buying price and selling price is used to return the optimum buy and sell date.
+
+	ASSUMPTION: It is assumned that the merchant can do only one transaction in the given time period.
+
+----------
+Complexity
+----------
+
+Function 1: O(n)
+
+line 1-5 	-> O(1)
+line 6-13	-> O(n) loop iterates n times and each iteration take constant time
+line 14-17	-> O(1)
+
+Time complexity = O(n)
